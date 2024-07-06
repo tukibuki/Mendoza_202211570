@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ModelEF.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="App">
+          <Key>
+            <PropertyRef Name="AppId" />
+          </Key>
+          <Property Name="AppId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Lenguaje" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="Eliminado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Programador">
+          <Key>
+            <PropertyRef Name="ProgramadorId" />
+          </Key>
+          <Property Name="ProgramadorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoProgramador" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="NombreCompleto" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="Eliminado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Solicitud">
+          <Key>
+            <PropertyRef Name="SolicitudId" />
+          </Key>
+          <Property Name="SolicitudId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoSolicitud" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="FechaHoraSolicitud" Type="datetime" Nullable="false" />
+          <Property Name="Atendido" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="Eliminado" Type="bit" Nullable="false" />
+          <Property Name="ProgramadorId" Type="int" Nullable="false" />
+          <Property Name="AppId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="Solicitud_App">
+          <End Role="App" Type="Self.App" Multiplicity="1" />
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="App">
+              <PropertyRef Name="AppId" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="AppId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Solicitud_Programador">
+          <End Role="Programador" Type="Self.Programador" Multiplicity="1" />
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Programador">
+              <PropertyRef Name="ProgramadorId" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="ProgramadorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelEFStoreContainer">
+          <EntitySet Name="App" EntityType="Self.App" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Programador" EntityType="Self.Programador" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Solicitud" EntityType="Self.Solicitud" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Solicitud_App" Association="Self.Solicitud_App">
+            <End Role="App" EntitySet="App" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+          <AssociationSet Name="Solicitud_Programador" Association="Self.Solicitud_Programador">
+            <End Role="Programador" EntitySet="Programador" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ModelEF" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="App">
+          <Key>
+            <PropertyRef Name="AppId" />
+          </Key>
+          <Property Name="AppId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lenguaje" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="Eliminado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Solicitud" Relationship="Self.Solicitud_App" FromRole="App" ToRole="Solicitud" />
+        </EntityType>
+        <EntityType Name="Programador">
+          <Key>
+            <PropertyRef Name="ProgramadorId" />
+          </Key>
+          <Property Name="ProgramadorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoProgramador" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NombreCompleto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="Eliminado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Solicitud" Relationship="Self.Solicitud_Programador" FromRole="Programador" ToRole="Solicitud" />
+        </EntityType>
+        <EntityType Name="Solicitud">
+          <Key>
+            <PropertyRef Name="SolicitudId" />
+          </Key>
+          <Property Name="SolicitudId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoSolicitud" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaHoraSolicitud" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Atendido" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Eliminado" Type="Boolean" Nullable="false" />
+          <Property Name="ProgramadorId" Type="Int32" Nullable="false" />
+          <Property Name="AppId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="App" Relationship="Self.Solicitud_App" FromRole="Solicitud" ToRole="App" />
+          <NavigationProperty Name="Programador" Relationship="Self.Solicitud_Programador" FromRole="Solicitud" ToRole="Programador" />
+        </EntityType>
+        <Association Name="Solicitud_App">
+          <End Role="App" Type="Self.App" Multiplicity="1" />
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="App">
+              <PropertyRef Name="AppId" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="AppId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Solicitud_Programador">
+          <End Role="Programador" Type="Self.Programador" Multiplicity="1" />
+          <End Role="Solicitud" Type="Self.Solicitud" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Programador">
+              <PropertyRef Name="ProgramadorId" />
+            </Principal>
+            <Dependent Role="Solicitud">
+              <PropertyRef Name="ProgramadorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDEFEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="App" EntityType="Self.App" />
+          <EntitySet Name="Programador" EntityType="Self.Programador" />
+          <EntitySet Name="Solicitud" EntityType="Self.Solicitud" />
+          <AssociationSet Name="Solicitud_App" Association="Self.Solicitud_App">
+            <End Role="App" EntitySet="App" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+          <AssociationSet Name="Solicitud_Programador" Association="Self.Solicitud_Programador">
+            <End Role="Programador" EntitySet="Programador" />
+            <End Role="Solicitud" EntitySet="Solicitud" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelEFStoreContainer" CdmEntityContainer="BDEFEntities">
+          <EntitySetMapping Name="App">
+            <EntityTypeMapping TypeName="ModelEF.App">
+              <MappingFragment StoreEntitySet="App">
+                <ScalarProperty Name="AppId" ColumnName="AppId" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Lenguaje" ColumnName="Lenguaje" />
+                <ScalarProperty Name="IDE" ColumnName="IDE" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Programador">
+            <EntityTypeMapping TypeName="ModelEF.Programador">
+              <MappingFragment StoreEntitySet="Programador">
+                <ScalarProperty Name="ProgramadorId" ColumnName="ProgramadorId" />
+                <ScalarProperty Name="CodigoProgramador" ColumnName="CodigoProgramador" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Solicitud">
+            <EntityTypeMapping TypeName="ModelEF.Solicitud">
+              <MappingFragment StoreEntitySet="Solicitud">
+                <ScalarProperty Name="SolicitudId" ColumnName="SolicitudId" />
+                <ScalarProperty Name="TipoSolicitud" ColumnName="TipoSolicitud" />
+                <ScalarProperty Name="FechaHoraSolicitud" ColumnName="FechaHoraSolicitud" />
+                <ScalarProperty Name="Atendido" ColumnName="Atendido" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Eliminado" ColumnName="Eliminado" />
+                <ScalarProperty Name="ProgramadorId" ColumnName="ProgramadorId" />
+                <ScalarProperty Name="AppId" ColumnName="AppId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
